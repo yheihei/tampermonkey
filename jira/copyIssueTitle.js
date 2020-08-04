@@ -12,7 +12,7 @@
   'use strict';
 
   // ボタンのテンプレート定義
-  const buttondomForClipboardlate = {
+  const buttonTemplate = {
     tag: 'div',
     label: 'コピー',
     className: 'aui-button aui-button-primary',
@@ -53,10 +53,10 @@
     Array.prototype.forEach.call(issues, issue => {
       // 課題毎にボタンを作成する
       const buttonNode = createCopyButtonElement(
-        buttondomForClipboardlate.tag,
-        buttondomForClipboardlate.className,
-        buttondomForClipboardlate.css,
-        buttondomForClipboardlate.label
+        buttonTemplate.tag,
+        buttonTemplate.className,
+        buttonTemplate.css,
+        buttonTemplate.label
       );
 
       // ボタンにコピーボタンが押された時の処理を追加
@@ -67,7 +67,7 @@
         const copiedString = `${key}_${title}`;
 
         // コピー用のDOMを作り 選択状態にする
-        let domForClipboard = document.createElement('div');
+        const domForClipboard = document.createElement('div');
         domForClipboard.appendChild(document.createElement('pre')).textContent = copiedString;
         domForClipboard.style.cssText = `
           position: fixed;
@@ -105,14 +105,23 @@
     return buttonNode;
   }
 
-  // 課題一覧のコンテナを取得する
-  const issueLinkContainers = document.querySelectorAll('.list-results-panel');
-  if (!issueLinkContainers.length) {
-    return;
+  /**
+   * 初期化関数
+   *
+   * @return {void}
+   */
+  function initialize() {
+    // 課題一覧のコンテナを取得する
+    const issueLinkContainers = document.querySelectorAll('.list-results-panel');
+    if (!issueLinkContainers.length) {
+      return;
+    }
+
+    // 課題一覧の課題部分にコピーボタンを追加する
+    Array.prototype.forEach.call(issueLinkContainers, issueLinkContainer => {
+      addCopyButtonToContainer(issueLinkContainer);
+    });
   }
 
-  // 課題一覧の課題部分にコピーボタンを追加する
-  Array.prototype.forEach.call(issueLinkContainers, issueLinkContainer => {
-    addCopyButtonToContainer(issueLinkContainer);
-  });
+  initialize();
 })();
