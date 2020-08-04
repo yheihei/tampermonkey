@@ -91,10 +91,10 @@
   /**
    * 指定のタグ、クラス、CSS、ラベルでボタンのNodeを作成する
    *
-   * @param {string} tag 
-   * @param {string} className 
-   * @param {string} css 
-   * @param {string} label 
+   * @param {string} tag
+   * @param {string} className
+   * @param {string} css
+   * @param {string} label
    * @return {Node}
    */
   function createCopyButtonElement(tag, className, css, label) {
@@ -111,16 +111,28 @@
    * @return {void}
    */
   function initialize() {
+    // 現在のURL
+    let href = location.href;
+
     // 課題一覧のコンテナを取得する
-    const issueLinkContainers = document.querySelectorAll('.list-results-panel');
-    if (!issueLinkContainers.length) {
+    const issueLinkContainer = document.querySelector('.search-results');
+    if (!issueLinkContainer) {
       return;
     }
 
     // 課題一覧の課題部分にコピーボタンを追加する
-    Array.prototype.forEach.call(issueLinkContainers, issueLinkContainer => {
-      addCopyButtonToContainer(issueLinkContainer);
+    addCopyButtonToContainer(issueLinkContainer);
+
+    // リロードせずにURLが変わった場合の処理
+    const observer = new MutationObserver(function(mutations) {
+      if(href !== location.href) {
+        // URLが変わったら 新しくコピーボタンを追加する
+        href = location.href;
+        addCopyButtonToContainer(issueLinkContainer);
+      }
     });
+    // DOMの変更を検知したら URLが変更されたと判定する
+    observer.observe(document, { childList: true, subtree: true });
   }
 
   initialize();
