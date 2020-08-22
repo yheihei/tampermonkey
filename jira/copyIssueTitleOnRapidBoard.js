@@ -18,9 +18,7 @@
     label: 'コピー',
     className: 'aui-button aui-button-primary js-title-copy-button',
     css: `
-      position: absolute;
-      top: 0px;
-      right: 0px;
+      margin-top: 10px;
       font-size: 10px;
     `
   }
@@ -64,7 +62,6 @@
       // コピーボタン設置済みであればskip
       if (issue.querySelectorAll(`[data-name="${buttonNode.dataset.name}"]`).length > 0) {
         // コピーボタン設置済みであればskip
-        console.log('skip!');
         return;
       }
 
