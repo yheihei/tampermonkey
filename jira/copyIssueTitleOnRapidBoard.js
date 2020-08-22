@@ -13,6 +13,7 @@
 
   // ボタンのテンプレート定義
   const buttonTemplate = {
+    name: 'copyButton',
     tag: 'div',
     label: 'コピー',
     className: 'aui-button aui-button-primary js-title-copy-button',
@@ -58,12 +59,14 @@
   function addCopyButton(issues) {
     Array.prototype.forEach.call(issues, issue => {
       // 課題毎にボタンを作成する
-      const buttonNode = createCopyButtonElement(
-        buttonTemplate.tag,
-        buttonTemplate.className,
-        buttonTemplate.css,
-        buttonTemplate.label
-      );
+      const buttonNode = createCopyButtonElement(buttonTemplate);
+
+      // コピーボタン設置済みであればskip
+      if (issue.querySelectorAll(`[data-name="${buttonNode.dataset.name}"]`).length > 0) {
+        // コピーボタン設置済みであればskip
+        console.log('skip!');
+        return;
+      }
 
       // タイトルとチケット番号を取得
       const title = issue.querySelector('.ghx-summary').dataset.tooltip;
@@ -92,10 +95,6 @@
 
         return result;
       };
-      if (issue.querySelectorAll('.js-title-copy-button').length > 0) {
-        // コピーボタン設置済みであればskip
-        return;
-      }
       issue.appendChild(buttonNode);
     });
   }
@@ -103,17 +102,15 @@
   /**
    * 指定のタグ、クラス、CSS、ラベルでボタンのNodeを作成する
    *
-   * @param {string} tag
-   * @param {string} className
-   * @param {string} css
-   * @param {string} label
+   * @param {object} buttonTemplate
    * @return {Node}
    */
-  function createCopyButtonElement(tag, className, css, label) {
-    const buttonNode = document.createElement(tag);
-    buttonNode.className = className;
-    buttonNode.style.cssText = css;
-    buttonNode.innerHTML = label;
+  function createCopyButtonElement(buttonTemplate) {
+    const buttonNode = document.createElement(buttonTemplate.tag);
+    buttonNode.dataset.name = buttonTemplate.name;
+    buttonNode.className = buttonTemplate.className;
+    buttonNode.style.cssText = buttonTemplate.css;
+    buttonNode.innerHTML = buttonTemplate.label;
     return buttonNode;
   }
 
