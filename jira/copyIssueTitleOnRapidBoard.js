@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         JIRA title copy button on board lists.
+// @name         [BoardList]JIRA title copy button.
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  Add title copy button to issue list.
@@ -30,22 +30,12 @@
    * @return {void}
    */
   function addCopyButtonToContainer(issueLinkContainer) {
-    // 非同期でDOMが設定される
-    // DOMが設定されるまで3回まで繰り返して待つ
-    const loopMaxCount = 3;
-    let currentCount = 0;
-    const loopId = setInterval(function() {
-      currentCount++;
-      if (currentCount > loopMaxCount) {
-        clearInterval(loopId);
-        return;
-      }
-      const issues = issueLinkContainer.querySelectorAll('.js-issue');
-      if (issues.length > 0) {
-        clearInterval(loopId);
-        addCopyButton(issues);
-      }
-    }, 3000);
+    // コピーボタン追加
+    const issues = issueLinkContainer.querySelectorAll('.js-issue');
+    if (issues.length > 0) {
+      addCopyButton(issues);
+      return;
+    }
   }
 
   /**
@@ -124,10 +114,6 @@
         return;
       }
       addCopyButtonToContainer(issueLinkContainer);
-      const copyButton = issueLinkContainer.querySelectorAll('.js-title-copy-button');
-      if (copyButton.length > 0) {
-        observer.disconnect(); // コピーボタンを追加できたら監視解除
-      }
     });
     // DOMの変更を検知したら ロード
     observer.observe(document, { childList: true, subtree: true });
