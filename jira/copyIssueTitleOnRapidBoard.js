@@ -60,7 +60,9 @@
       const key = issue.querySelector('.ghx-key').dataset.tooltip;
 
       // ボタンにコピーボタンが押された時の処理を追加
-      buttonNode.onclick = function(){
+      buttonNode.onclick = function(event) {
+        // 親要素へのバブリングを停止する
+        event.stopPropagation();
         // コピーする文字列を作成
         const copiedString = `${key}_${title}`;
 
