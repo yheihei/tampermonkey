@@ -111,7 +111,7 @@
   function initialize() {
     const observer = new MutationObserver(function(mutations) {
       // 課題一覧のコンテナを取得する
-      const issueLinkContainer = document.querySelector('.ghx-columns');
+      const issueLinkContainer = document.getElementById('ghx-pool-column');
       if (!issueLinkContainer) {
         return;
       }
